@@ -118,6 +118,28 @@ if (!length(peninsula_present)) peninsula_present <- sort(unique(sites$peninsula
 
 addResourcePath("overlays", file.path(DATA_DIR, "overlays"))
 
+MED_WEST <- -10
+MED_EAST <- 45
+MED_SOUTH <- 27
+MED_NORTH <- 48
+if (nrow(overlays)) {
+  hum <- if ("group" %in% names(overlays)) {
+    overlays[overlays$group == "humidity", , drop = FALSE]
+  } else {
+    overlays
+  }
+  if (!nrow(hum)) hum <- overlays
+  ov_west <- min(hum$west, na.rm = TRUE)
+  ov_east <- max(hum$east, na.rm = TRUE)
+  ov_south <- min(hum$south, na.rm = TRUE)
+  ov_north <- max(hum$north, na.rm = TRUE)
+} else {
+  ov_west <- MED_WEST
+  ov_east <- MED_EAST
+  ov_south <- MED_SOUTH
+  ov_north <- MED_NORTH
+}
+
 overlay_payload <- list()
 if (nrow(overlays)) {
   overlay_payload <- lapply(seq_len(nrow(overlays)), function(i) {
@@ -131,6 +153,10 @@ if (nrow(overlays)) {
     )
   })
 }
+map_payload <- list(
+  overlays = overlay_payload,
+  bounds = list(south = ov_south, west = ov_west, north = ov_north, east = ov_east)
+)
 
 theme <- bs_theme(
   version = 5,
@@ -245,11 +271,23 @@ ui <- page_sidebar(
       selected = "all"
     ),
     checkboxInput("candidates_only", "MEDITRACK candidate lakes only", FALSE),
-    uiOutput("legend_ui"),
-    uiOutput("site_card"),
-    uiOutput("series_ui")
+    uiOutput("legend_ui")
   ),
-  div(class = "map-wrap", leafletOutput("map", height = "100%"))
+  div(
+    class = "main-stack",
+    div(
+      class = "map-pane",
+      leafletOutput("map", width = "100%", height = "100%")
+    ),
+    div(
+      class = "meta-pane",
+      div(
+        class = "meta-grid",
+        div(class = "meta-facts", uiOutput("site_card")),
+        div(class = "meta-series", uiOutput("series_ui"))
+      )
+    )
+  )
 )
 
 server <- function(input, output, session) {
@@ -284,17 +322,19 @@ server <- function(input, output, session) {
 
   output$map <- renderLeaflet({
     map <- leaflet(options = leafletOptions(
-      minZoom = 4,
+      minZoom = 5,
       maxZoom = 10,
       zoomSnap = 0.25,
       zoomDelta = 0.5,
-      worldCopyJump = FALSE
+      worldCopyJump = FALSE,
+      maxBounds = list(c(ov_south, ov_west), c(ov_north, ov_east)),
+      maxBoundsViscosity = 1.0
     )) %>%
       addProviderTiles(
         providers$Esri.WorldGrayCanvas,
         options = providerTileOptions(attribution = "Tiles © Esri")
       ) %>%
-      fitBounds(lng1 = -10, lat1 = 27, lng2 = 45, lat2 = 48) %>%
+      fitBounds(lng1 = ov_west, lat1 = ov_south, lng2 = ov_east, lat2 = ov_north) %>%
       htmlwidgets::onRender(
         "function(el, x, data) {
            var map = this;
@@ -303,19 +343,33 @@ server <- function(input, output, session) {
            map.getPane('climatePane').style.zIndex = 350;
            map.getPane('climatePane').style.pointerEvents = 'none';
            window.mtOverlays = {};
-           (data || []).forEach(function(o) {
+           var overlays = (data && data.overlays) ? data.overlays : [];
+           var b = (data && data.bounds) ? data.bounds : {south: 27, west: -10, north: 48, east: 45};
+           overlays.forEach(function(o) {
              window.mtOverlays[o.id] = L.imageOverlay(
                o.url,
                [[o.south, o.west], [o.north, o.east]],
                {pane: 'climatePane', opacity: 0.72}
              );
            });
-           setTimeout(function() {
+           var llb = L.latLngBounds([[b.south, b.west], [b.north, b.east]]);
+           map.setMaxBounds(llb);
+           map.options.maxBoundsViscosity = 1.0;
+           function lockExtent() {
              map.invalidateSize();
-             map.fitBounds([[27, -10], [48, 45]], {padding: [8, 8], maxZoom: 5.25});
+             map.setMinZoom(3);
+             var zFill = map.getBoundsZoom(llb, true);
+             if (!isFinite(zFill)) zFill = 5;
+             map.setMinZoom(zFill);
+             if (map.getZoom() < zFill) map.setZoom(zFill, {animate: false});
+           }
+           setTimeout(function() {
+             lockExtent();
+             map.fitBounds(llb, {padding: [0, 0], animate: false, maxZoom: map.getMinZoom()});
            }, 150);
+           map.on('resize', lockExtent);
          }",
-        data = overlay_payload
+        data = map_payload
       )
     map
   })
@@ -422,7 +476,7 @@ server <- function(input, output, session) {
       line = list(color = "#1c2833", width = 1.4)
     ) %>%
       layout(
-        margin = list(l = 48, r = 12, t = 8, b = 40),
+        margin = list(l = 48, r = 12, t = 6, b = 36),
         xaxis = list(title = "Age (ka BP)", autorange = "reversed", zeroline = FALSE),
         yaxis = list(title = ylab, zeroline = FALSE),
         plot_bgcolor = "#ffffff",
@@ -438,16 +492,16 @@ server <- function(input, output, session) {
     slug <- row$slug[[1]]
     tabs <- list()
     if (isTRUE(row$has_trace) && !is.null(series_for("trace", slug))) {
-      tabs <- c(tabs, list(tabPanel("TraCE climate", plotlyOutput("plot_trace", height = 220))))
+      tabs <- c(tabs, list(tabPanel("TraCE climate", plotlyOutput("plot_trace", height = 170))))
     }
     if (isTRUE(row$has_roc) && !is.null(series_for("roc", slug))) {
-      tabs <- c(tabs, list(tabPanel("Pollen RoC", plotlyOutput("plot_roc", height = 220))))
+      tabs <- c(tabs, list(tabPanel("Pollen RoC", plotlyOutput("plot_roc", height = 170))))
     }
     if (isTRUE(row$has_erb) && !is.null(series_for("erb", slug))) {
-      tabs <- c(tabs, list(tabPanel("Erb T", plotlyOutput("plot_erb", height = 220))))
+      tabs <- c(tabs, list(tabPanel("Erb T", plotlyOutput("plot_erb", height = 170))))
     }
     if (isTRUE(row$has_chironomid) && !is.null(series_for("chironomid", slug))) {
-      tabs <- c(tabs, list(tabPanel("Chironomid T", plotlyOutput("plot_chiro", height = 220))))
+      tabs <- c(tabs, list(tabPanel("Chironomid T", plotlyOutput("plot_chiro", height = 170))))
     }
     if (!length(tabs)) {
       return(tags$p(class = "muted", "No compiled time series for this site yet."))

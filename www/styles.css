@@ -16,10 +16,61 @@ html, body { height: 100%; }
   height: 100vh !important;
   padding: 0 !important;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
-#map, .leaflet, .html-widget.leaflet {
-  height: 100vh !important;
-  min-height: 100vh;
+.bslib-page-main {
+  flex: 1 1 auto;
+  min-height: 0 !important;
+  height: 100% !important;
+  max-height: 100%;
+  padding: 0 !important;
+  gap: 0 !important;
+  display: flex !important;
+  flex-direction: column;
+}
+
+.main-stack {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+}
+
+.map-pane {
+  flex: 7 1 0;
+  min-height: 0;
+  position: relative;
+}
+.map-pane .leaflet,
+.map-pane .html-widget.leaflet,
+.map-pane .leaflet-container,
+#map {
+  height: 100% !important;
+  min-height: 0 !important;
+  width: 100%;
+}
+
+.meta-pane {
+  flex: 3 1 0;
+  min-height: 180px;
+  max-height: 35%;
+  overflow: auto;
+  background: #fbfaf7;
+  border-top: 1px solid #d5d8dc;
+  padding: 0.7rem 0.9rem 0.85rem;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.85fr) minmax(280px, 1.15fr);
+  gap: 0.6rem 1.1rem;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .meta-grid { grid-template-columns: 1fr; }
 }
 
 .brand h1 {
@@ -70,13 +121,27 @@ html, body { height: 100%; }
 .site-card {
   background: white;
   border: 1px solid #d5d8dc;
-  padding: 0.7rem 0.8rem;
-  margin-top: 0.8rem;
+  padding: 0.65rem 0.8rem;
+  margin-top: 0;
 }
 .site-card h2 { font-size: 1.05rem; margin: 0 0 0.35rem; }
-.site-card.muted, .muted { color: var(--muted); font-size: 0.85rem; }
-.facts { list-style: none; padding: 0; margin: 0.3rem 0; font-size: 0.8rem; }
+.site-card.muted, .muted { color: var(--muted); font-size: 0.9rem; }
+.meta-facts .site-card.muted {
+  background: transparent;
+  border: none;
+  padding: 0.35rem 0.1rem;
+}
+.facts {
+  list-style: none;
+  padding: 0;
+  margin: 0.3rem 0;
+  font-size: 0.8rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 0.75rem;
+}
 .facts li { margin: 0.18rem 0; }
+.facts li:last-child { grid-column: 1 / -1; }
 .facts b { color: var(--muted); font-weight: 600; margin-right: 0.25rem; }
 .badge {
   display: inline-block;
@@ -90,4 +155,6 @@ html, body { height: 100%; }
 .note { font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; }
 
 .nav-pills .nav-link { font-size: 0.78rem; padding: 0.2rem 0.55rem; }
-.nav-pills { margin-top: 0.6rem; }
+.nav-pills { margin-top: 0; }
+.meta-series .nav-pills { margin-top: 0; }
+.meta-series .plotly { margin-top: 0.2rem; }
