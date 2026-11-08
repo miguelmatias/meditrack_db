@@ -4,6 +4,8 @@ Read-only Shiny map of the circum-Mediterranean downcore lake catalog used in th
 
 Live URL: https://miguelmatias.shinyapps.io/meditrack_db/
 
+Source: https://github.com/miguelmatias/meditrack_db
+
 ## Proposal caption
 
 An interactive draft of the circum-Mediterranean lake archive (live count from MASTER) and TraCE / LGM / CMIP6 hydroclimate overlays is at https://miguelmatias.shinyapps.io/meditrack_db/. Click a site for proxy coverage and available time series. The compiled database is not downloadable.
