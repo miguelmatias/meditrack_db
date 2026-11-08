@@ -1,0 +1,45 @@
+{
+  "n_cores": 722,
+  "n_sites": 503,
+  "cited_cores": 737,
+  "cited_sites": 518,
+  "n_candidates": 18,
+  "bbox": {
+    "lon": [
+      -10.0,
+      45.0
+    ],
+    "lat": [
+      27.0,
+      48.0
+    ]
+  },
+  "freeze_date": "2026-11-08",
+  "n_with_trace": 397,
+  "n_with_roc": 155,
+  "n_with_erb": 170,
+  "n_with_chironomid": 12,
+  "n_overlays": 9,
+  "record_colors": {
+    "pollen_only": "#5d6d7e",
+    "aquatic": "#1ABC9C",
+    "paired": "#C0392B"
+  },
+  "record_labels": {
+    "pollen_only": "Pollen only",
+    "aquatic": "Aquatic proxies",
+    "paired": "Paired climate\u2013ecology"
+  },
+  "gain_colors": {
+    "gain": "#E74C3C",
+    "persist_med": "#E8C9A4",
+    "loss": "#1A5276",
+    "persist_non": "#D6DCE2"
+  },
+  "gain_labels": {
+    "gain": "Became dry",
+    "persist_med": "Stayed dry",
+    "loss": "Became humid",
+    "persist_non": "Stayed humid"
+  }
+}

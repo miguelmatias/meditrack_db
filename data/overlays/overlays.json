@@ -1,0 +1,187 @@
+[
+  {
+    "id": "trace_i_0ka",
+    "group": "humidity",
+    "label": "TraCE 0 ka (\u2248 1950 CE) De Martonne I",
+    "caption": "CHELSA-TraCE21k De Martonne I. Ocean masked.",
+    "kind": "continuous",
+    "file": "trace_i_0ka.png",
+    "west": -10.000139568850017,
+    "east": 44.999860211149986,
+    "south": 26.99986064314998,
+    "north": 47.99986055914998,
+    "vmin": 0.0,
+    "vmax": 80.0,
+    "units": "De Martonne I"
+  },
+  {
+    "id": "trace_i_6ka",
+    "group": "humidity",
+    "label": "TraCE 6 ka De Martonne I",
+    "caption": "CHELSA-TraCE21k De Martonne I. Ocean masked.",
+    "kind": "continuous",
+    "file": "trace_i_6ka.png",
+    "west": -10.000139568850017,
+    "east": 44.999860211149986,
+    "south": 26.99986064314998,
+    "north": 47.99986055914998,
+    "vmin": 0.0,
+    "vmax": 80.0,
+    "units": "De Martonne I"
+  },
+  {
+    "id": "trace_i_9ka",
+    "group": "humidity",
+    "label": "TraCE 9 ka De Martonne I",
+    "caption": "CHELSA-TraCE21k De Martonne I. Ocean masked.",
+    "kind": "continuous",
+    "file": "trace_i_9ka.png",
+    "west": -10.000139568850017,
+    "east": 44.999860211149986,
+    "south": 26.99986064314998,
+    "north": 47.99986055914998,
+    "vmin": 0.0,
+    "vmax": 80.0,
+    "units": "De Martonne I"
+  },
+  {
+    "id": "lgm",
+    "group": "humidity",
+    "label": "LGM (~21 ka) De Martonne I",
+    "caption": "WorldClim 1.4 LGM CCSM. Ocean masked.",
+    "kind": "continuous",
+    "file": "lgm_demartonne.png",
+    "west": -10.0,
+    "east": 45.00000000000043,
+    "south": 26.99999999999984,
+    "north": 48.00000000000001,
+    "vmin": 0.0,
+    "vmax": 80.0,
+    "units": "De Martonne I"
+  },
+  {
+    "id": "gain_peak",
+    "group": "gainloss",
+    "label": "I = 30 gain/loss \u00b7 peak wettest Holocene \u2192 0 ka",
+    "caption": "Became dry = I fell below 30. CHELSA-TraCE21k.",
+    "kind": "classes",
+    "file": "gain_peak.png",
+    "west": -10.000139568850017,
+    "east": 39.99986023114999,
+    "south": 31.999860623149978,
+    "north": 45.99986056714998,
+    "classes": {
+      "gain": "Became dry",
+      "persist_med": "Stayed dry",
+      "loss": "Became humid",
+      "persist_non": "Stayed humid"
+    },
+    "colors": {
+      "gain": "#E74C3C",
+      "persist_med": "#E8C9A4",
+      "loss": "#1A5276",
+      "persist_non": "#D6DCE2"
+    },
+    "threshold": 30.0
+  },
+  {
+    "id": "gain_6ka",
+    "group": "gainloss",
+    "label": "I = 30 gain/loss \u00b7 6 ka \u2192 0 ka",
+    "caption": "Became dry = I fell below 30. CHELSA-TraCE21k.",
+    "kind": "classes",
+    "file": "gain_6ka.png",
+    "west": -10.000139568850017,
+    "east": 39.99986023114999,
+    "south": 31.999860623149978,
+    "north": 45.99986056714998,
+    "classes": {
+      "gain": "Became dry",
+      "persist_med": "Stayed dry",
+      "loss": "Became humid",
+      "persist_non": "Stayed humid"
+    },
+    "colors": {
+      "gain": "#E74C3C",
+      "persist_med": "#E8C9A4",
+      "loss": "#1A5276",
+      "persist_non": "#D6DCE2"
+    },
+    "threshold": 30.0
+  },
+  {
+    "id": "gain_8p3_5ka",
+    "group": "gainloss",
+    "label": "I = 30 gain/loss \u00b7 8.3 ka \u2192 5 ka",
+    "caption": "Became dry = I fell below 30. CHELSA-TraCE21k.",
+    "kind": "classes",
+    "file": "gain_8p3_5ka.png",
+    "west": -10.000139568850017,
+    "east": 39.99986023114999,
+    "south": 31.999860623149978,
+    "north": 45.99986056714998,
+    "classes": {
+      "gain": "Became dry",
+      "persist_med": "Stayed dry",
+      "loss": "Became humid",
+      "persist_non": "Stayed humid"
+    },
+    "colors": {
+      "gain": "#E74C3C",
+      "persist_med": "#E8C9A4",
+      "loss": "#1A5276",
+      "persist_non": "#D6DCE2"
+    },
+    "threshold": 30.0
+  },
+  {
+    "id": "gain_ssp245",
+    "group": "gainloss",
+    "label": "I = 30 gain/loss \u00b7 SSP2-4.5 2081\u20132100",
+    "caption": "WorldClim 2.1 / MPI-ESM1-2-HR. Present is 1970\u20132000, not TraCE 0 ka.",
+    "kind": "classes",
+    "file": "gain_ssp245.png",
+    "west": -10.0,
+    "east": 40.0,
+    "south": 32.0,
+    "north": 46.0,
+    "classes": {
+      "gain": "Became dry",
+      "persist_med": "Stayed dry",
+      "loss": "Became humid",
+      "persist_non": "Stayed humid"
+    },
+    "colors": {
+      "gain": "#E74C3C",
+      "persist_med": "#E8C9A4",
+      "loss": "#1A5276",
+      "persist_non": "#D6DCE2"
+    },
+    "threshold": 30.0
+  },
+  {
+    "id": "gain_ssp585",
+    "group": "gainloss",
+    "label": "I = 30 gain/loss \u00b7 SSP5-8.5 2081\u20132100",
+    "caption": "WorldClim 2.1 / MPI-ESM1-2-HR. Present is 1970\u20132000, not TraCE 0 ka.",
+    "kind": "classes",
+    "file": "gain_ssp585.png",
+    "west": -10.0,
+    "east": 40.0,
+    "south": 32.0,
+    "north": 46.0,
+    "classes": {
+      "gain": "Became dry",
+      "persist_med": "Stayed dry",
+      "loss": "Became humid",
+      "persist_non": "Stayed humid"
+    },
+    "colors": {
+      "gain": "#E74C3C",
+      "persist_med": "#E8C9A4",
+      "loss": "#1A5276",
+      "persist_non": "#D6DCE2"
+    },
+    "threshold": 30.0
+  }
+]
