@@ -1,6 +1,6 @@
-# MEDITRACK lake archive (draft explorer)
+# MEDITRACK lake archive (v1)
 
-Read-only Shiny map of the circum-Mediterranean downcore lake catalog used in the MEDITRACK proposal. Click a site for proxy coverage and, when compiled, TraCE climate, pollen rate-of-change, Erb temperature, or chironomid July T. Climate overlays are the same TraCE / LGM / CMIP6 layers discussed in the proposal. **The compiled database cannot be downloaded.**
+Read-only Shiny map of the Mediterranean downcore lake catalog used in the MEDITRACK proposal. Click a site for proxy coverage and, when compiled, TraCE climate, pollen rate-of-change, Erb temperature, or chironomid July T. Climate overlays are the same TraCE / LGM / CMIP6 layers discussed in the proposal. **The compiled database cannot be downloaded.**
 
 Live URL: https://miguelmatias.shinyapps.io/meditrack_db/
 
@@ -8,7 +8,7 @@ Source: https://github.com/miguelmatias/meditrack_db
 
 ## Proposal caption
 
-An interactive draft of the circum-Mediterranean lake archive (live count from MASTER) and TraCE / LGM / CMIP6 hydroclimate overlays is at https://miguelmatias.shinyapps.io/meditrack_db/. Click a site for proxy coverage and available time series. The compiled database is not downloadable.
+An interactive map of the Mediterranean lake archive (live count from MASTER) and TraCE / LGM / CMIP6 hydroclimate overlays is at https://miguelmatias.shinyapps.io/meditrack_db/. Click a site for proxy coverage and available time series. The compiled database is not downloadable.
 
 ## What is shown
 
@@ -16,7 +16,7 @@ An interactive draft of the circum-Mediterranean lake archive (live count from M
 - Optional highlight of MEDITRACK candidate lakes.
 - Overlays (one at a time): LGM De Martonne I; TraCE I at 0, 6 and 9 ka; I = 30 gain/loss for peak-wettest Holocene → 0 ka, 6 ka → 0 ka, 8.3 ka → 5 ka; SSP2-4.5 and SSP5-8.5 (2081–2100 vs 1970–2000).
 
-This is a draft viewer, not a data release.
+This is v1 of the viewer, not a data release.
 
 ## Climate data credit
 

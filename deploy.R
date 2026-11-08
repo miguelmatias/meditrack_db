@@ -1,4 +1,4 @@
-# Deploy the draft explorer to shinyapps.io.
+# Deploy the MEDITRACK v1 explorer to shinyapps.io.
 # Requires a Posit account: rsconnect::setAccountInfo(...)
 # During panel review, use Starter or Basic so the 25-hour free tier is not exhausted.
 #
@@ -19,7 +19,7 @@ app_files <- app_files[file.exists(app_files)]
 rsconnect::deployApp(
   appDir = ".",
   appName = "meditrack_db",
-  appTitle = "MEDITRACK lake archive (draft)",
+  appTitle = "MEDITRACK v1 lake archive",
   appFiles = app_files,
   forceUpdate = TRUE,
   lint = FALSE

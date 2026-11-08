@@ -1,4 +1,4 @@
-# MEDITRACK circum-Mediterranean lake archive — draft reviewer explorer.
+# MEDITRACK Mediterranean lake archive — v1.
 # Read-only: no downloadHandler, no table export, Plotly mode bar off.
 # Time series live in data/series (not www/). Overlay PNGs are served at runtime.
 
@@ -235,12 +235,8 @@ ui <- page_sidebar(
     bg = "#f7f4ee",
     tags$div(
       class = "brand",
-      tags$div(class = "brand-kicker", "MEDITRACK draft explorer"),
-      tags$h1("Circum-Mediterranean lake archive"),
-      tags$p(
-        class = "banner",
-        "Draft for proposal review. Compiled data cannot be downloaded."
-      ),
+      tags$div(class = "brand-kicker", "MEDITRACK v1"),
+      tags$h1("Mediterranean lake archive"),
       tags$p(
         class = "counts",
         sprintf(
@@ -404,6 +400,31 @@ server <- function(input, output, session) {
       labelOptions = labelOptions(textsize = "12px")
     )
   })
+
+  observeEvent(input$peninsula, {
+    proxy <- leafletProxy("map")
+    if (is.null(input$peninsula) || identical(input$peninsula, "all")) {
+      proxy %>% flyToBounds(ov_west, ov_south, ov_east, ov_north)
+      return()
+    }
+    df <- sites[sites$peninsula == input$peninsula, , drop = FALSE]
+    if (!nrow(df)) return()
+    if (nrow(df) < 2) {
+      proxy %>% flyTo(lng = df$longitude[[1]], lat = df$latitude[[1]], zoom = 7.5)
+      return()
+    }
+    lngs <- df$longitude
+    lats <- df$latitude
+    pad_lng <- max(0.35, 0.08 * (max(lngs, na.rm = TRUE) - min(lngs, na.rm = TRUE)))
+    pad_lat <- max(0.25, 0.08 * (max(lats, na.rm = TRUE) - min(lats, na.rm = TRUE)))
+    proxy %>% flyToBounds(
+      lng1 = min(lngs, na.rm = TRUE) - pad_lng,
+      lat1 = min(lats, na.rm = TRUE) - pad_lat,
+      lng2 = max(lngs, na.rm = TRUE) + pad_lng,
+      lat2 = max(lats, na.rm = TRUE) + pad_lat,
+      options = list(maxZoom = 8, padding = c(24, 24))
+    )
+  }, ignoreInit = TRUE)
 
   selected <- reactiveVal(NULL)
 

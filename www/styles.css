@@ -87,15 +87,6 @@ html, body { height: 100%; }
   color: var(--muted);
 }
 
-.banner {
-  background: #fdebd0;
-  border: 1px solid #f5cba7;
-  color: var(--ink);
-  padding: 0.55rem 0.7rem;
-  font-size: 0.85rem;
-  line-height: 1.35;
-}
-
 .counts {
   color: var(--muted);
   font-size: 0.8rem;
