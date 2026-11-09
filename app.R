@@ -386,14 +386,39 @@ server <- function(input, output, session) {
     )
   })
 
+  default_slug <- "laguna_de_zonar"
+  default_row <- if (nrow(sites)) {
+    hit <- sites[sites$slug %in% c(default_slug, "laguna_de_zo_ar"), , drop = FALSE]
+    if (!nrow(hit)) {
+      hit <- sites[grepl("zonar|zo\u00f1ar", sites$site_name, ignore.case = TRUE), , drop = FALSE]
+    }
+    if (nrow(hit)) hit[1, , drop = FALSE] else NULL
+  } else {
+    NULL
+  }
+  selected <- reactiveVal(default_row)
+
   observe({
     df <- filtered()
     proxy <- leafletProxy("map", data = df) %>% clearMarkers() %>% clearGroup("sites")
     if (!nrow(df)) return()
     cols <- unname(RECORD_COLORS[df$record_class])
-    weight <- ifelse(df$candidate_status == "selected", 2.4, ifelse(df$candidate_status == "alternative", 1.8, 0.6))
-    stroke <- ifelse(df$candidate_status %in% c("selected", "alternative"), "#F1C40F", "#1c2833")
-    radius <- ifelse(df$candidate_status == "selected", 8, ifelse(df$candidate_status == "alternative", 7, 5))
+    sel_slug <- {
+      row <- selected()
+      if (is.null(row) || !nrow(row)) "" else as.character(row$slug[[1]])
+    }
+    is_sel <- df$slug == sel_slug
+    weight <- ifelse(
+      is_sel,
+      3.2,
+      ifelse(df$candidate_status == "selected", 2.4, ifelse(df$candidate_status == "alternative", 1.8, 0.6))
+    )
+    stroke <- ifelse(is_sel, "#1c2833", ifelse(df$candidate_status %in% c("selected", "alternative"), "#F1C40F", "#1c2833"))
+    radius <- ifelse(
+      is_sel,
+      9,
+      ifelse(df$candidate_status == "selected", 8, ifelse(df$candidate_status == "alternative", 7, 5))
+    )
     proxy %>% addCircleMarkers(
       lng = ~longitude,
       lat = ~latitude,
@@ -435,14 +460,24 @@ server <- function(input, output, session) {
     )
   }, ignoreInit = TRUE)
 
-  selected <- reactiveVal(NULL)
-
   observeEvent(input$map_marker_click, {
     click <- input$map_marker_click
     if (is.null(click$id)) return()
     hit <- sites[sites$slug == click$id, , drop = FALSE]
     if (nrow(hit)) selected(hit[1, , drop = FALSE])
   })
+
+  observeEvent(selected(), {
+    row <- selected()
+    proxy <- leafletProxy("map") %>% clearPopups()
+    if (is.null(row) || !nrow(row)) return()
+    proxy %>% addPopups(
+      lng = as.numeric(row$longitude[[1]]),
+      lat = as.numeric(row$latitude[[1]]),
+      popup = htmltools::htmlEscape(as.character(row$site_name[[1]])),
+      options = popupOptions(closeButton = TRUE, autoPan = FALSE)
+    )
+  }, ignoreNULL = TRUE)
 
   output$site_card <- renderUI({
     row <- selected()
