@@ -160,14 +160,10 @@ map_payload <- list(
 
 theme <- bs_theme(
   version = 5,
-  bg = "#000000",
-  fg = "#e8eaed",
-  primary = "#5aa0d4",
-  secondary = "#c45a32",
-  success = "#1ABC9C",
-  info = "#5aa0d4",
-  warning = "#F1C40F",
-  danger = "#C0392B"
+  bootswatch = "flatly",
+  bg = "#ffffff",
+  fg = "#1c2833",
+  primary = "#1c2833"
 )
 
 overlay_js <- HTML(paste(
@@ -238,7 +234,7 @@ ui <- page_sidebar(
   ),
   sidebar = sidebar(
     width = 380,
-    bg = "#000000",
+    bg = "#f7f4ee",
     tags$div(
       class = "brand",
       tags$img(
@@ -338,11 +334,10 @@ server <- function(input, output, session) {
       maxBounds = list(c(ov_south, ov_west), c(ov_north, ov_east)),
       maxBoundsViscosity = 1.0
     )) %>%
-      # CartoDB.DarkMatter watermarks "API KEY REQUIRED"; Esri Dark Gray is key-free.
-      addTiles(
-        urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-        attribution = "Tiles © Esri — Esri, HERE, Garmin, FAO, NOAA, USGS",
-        options = tileOptions(minZoom = 3, maxZoom = 16)
+      # Carto Positron watermarks "API KEY REQUIRED"; Esri WorldGrayCanvas is key-free.
+      addProviderTiles(
+        providers$Esri.WorldGrayCanvas,
+        options = providerTileOptions(attribution = "Tiles © Esri")
       ) %>%
       fitBounds(lng1 = ov_west, lat1 = ov_south, lng2 = ov_east, lat2 = ov_north) %>%
       htmlwidgets::onRender(
@@ -397,7 +392,7 @@ server <- function(input, output, session) {
     if (!nrow(df)) return()
     cols <- unname(RECORD_COLORS[df$record_class])
     weight <- ifelse(df$candidate_status == "selected", 2.4, ifelse(df$candidate_status == "alternative", 1.8, 0.6))
-    stroke <- ifelse(df$candidate_status %in% c("selected", "alternative"), "#F1C40F", "#d5dce2")
+    stroke <- ifelse(df$candidate_status %in% c("selected", "alternative"), "#F1C40F", "#1c2833")
     radius <- ifelse(df$candidate_status == "selected", 8, ifelse(df$candidate_status == "alternative", 7, 5))
     proxy %>% addCircleMarkers(
       lng = ~longitude,
@@ -411,15 +406,7 @@ server <- function(input, output, session) {
       fillColor = cols,
       fillOpacity = 0.92,
       label = ~site_name,
-      labelOptions = labelOptions(
-        textsize = "12px",
-        style = list(
-          background = "#12151a",
-          color = "#e8eaed",
-          border = "1px solid #2a2e33",
-          "box-shadow" = "none"
-        )
-      )
+      labelOptions = labelOptions(textsize = "12px")
     )
   })
 
@@ -509,19 +496,6 @@ server <- function(input, output, session) {
   pal_plot <- function(df, x, y, ylab) {
     df$age_ka <- df[[x]] / 1000
     df$yval <- df[[y]]
-    ax <- function(title, extra = list()) {
-      utils::modifyList(
-        list(
-          title = title,
-          zeroline = FALSE,
-          gridcolor = "#22262c",
-          linecolor = "#3a4048",
-          tickcolor = "#3a4048",
-          color = "#c5ccd3"
-        ),
-        extra
-      )
-    }
     plot_ly(
       df,
       x = ~age_ka,
@@ -529,15 +503,15 @@ server <- function(input, output, session) {
       type = "scatter",
       mode = "lines",
       hoverinfo = "x+y",
-      line = list(color = "#8ec4e8", width = 1.4)
+      line = list(color = "#1c2833", width = 1.4)
     ) %>%
       layout(
         margin = list(l = 48, r = 12, t = 6, b = 36),
-        xaxis = ax("Age (ka BP)", list(autorange = "reversed")),
-        yaxis = ax(ylab),
-        plot_bgcolor = "#0b0d10",
-        paper_bgcolor = "#0b0d10",
-        font = list(family = "sans-serif", size = 11, color = "#c5ccd3")
+        xaxis = list(title = "Age (ka BP)", autorange = "reversed", zeroline = FALSE),
+        yaxis = list(title = ylab, zeroline = FALSE),
+        plot_bgcolor = "#ffffff",
+        paper_bgcolor = "#ffffff",
+        font = list(family = "sans-serif", size = 11, color = "#1c2833")
       ) %>%
       config(displayModeBar = FALSE, staticPlot = FALSE)
   }
