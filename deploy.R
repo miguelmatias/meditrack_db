@@ -9,6 +9,7 @@ app_files <- c(
   "app.R",
   "README.md",
   "www/styles.css",
+  "www/meditrack_logo.png",
   "data/sites.geojson",
   "data/meta.json",
   list.files("data/overlays", full.names = TRUE),
