@@ -1,6 +1,6 @@
 # MEDITRACK Mediterranean lake archive — v1.
-# Read-only explorer: compiled TraCE / RoC / Erb / chironomid series are not
-# downloadable. Catalog CSV (names, coords, public fields) is allowed.
+# Read-only explorer: compiled TraCE / RoC / Erb / chironomid series and the
+# catalog table are not downloadable.
 
 library(shiny)
 library(bslib)
@@ -43,10 +43,6 @@ GAIN_LABELS <- c(
   persist_non = "Stayed humid"
 )
 PENINSULA_GROUP <- c("Iberia", "Italy", "Balkans")
-CATALOG_COLS <- c(
-  "site_name", "country", "peninsula", "record_label", "subclass_list",
-  "n_cores", "span_display", "latitude", "longitude", "doi_url"
-)
 
 read_json <- function(path, default = list()) {
   if (!file.exists(path)) return(default)
@@ -402,28 +398,34 @@ about_ui <- tags$div(
   ),
   tags$p(tags$b("Version "), "v1  ·  ", tags$b("Sites "), n_sites_live, " / ", n_cores_live, " cores",
          "  ·  freeze ", meta$freeze_date %||% ""),
+  tags$h3("Affiliation"),
+  tags$p("Hosted and developed at the Museo Nacional de Ciencias Naturales (MNCN-CSIC), Madrid."),
   tags$h3("Citation"),
-  tags$p("MEDITRACK project / Miguel Matias (viewer and catalog). Climate layers: CHELSA-TraCE21k, Karger et al. 2023; WorldClim; Erb et al. 2022 globally resolved temperature."),
+  tags$p("MEDITRACK project / Miguel Matias, Museo Nacional de Ciencias Naturales (MNCN-CSIC). Climate layers: CHELSA-TraCE21k, Karger et al. 2023; WorldClim; Erb et al. 2022 globally resolved temperature."),
   tags$h3("Licence"),
   tags$p("This viewer is a draft. Compiled TraCE, pollen RoC, Erb and chironomid series are not redistributable from this app. Catalog names and coordinates come from published papers."),
   tags$h3("Data access"),
-  tags$p("No bulk download. Paper and dataset DOIs (and Neotoma / NOAA links when known) are listed on each site. An optional CSV of the public catalog table (names, coordinates, class, proxies) is available on the Table tab."),
+  tags$p("No download. The catalog table is for browsing in the app only. Paper and dataset DOIs (and Neotoma / NOAA links when known) are listed on each site."),
   tags$h3("Time-coverage filter"),
   tags$p("Best-effort parse of the published time-span text: numbers with ka / cal BP / yr, plus named periods (Holocene ≈ 12–0 ka, Lateglacial, LGM, …). Coring years such as 2011 count as 0 ka. If the text cannot be parsed, the site stays visible unless “Hide sites with unknown time span” is on; compiled series ages are used as a fallback when present. Mid-Holocene 8–3.5 ka is a one-click preset."),
   tags$h3("Contact"),
   tags$p(
-    "Miguel Matias  ·  ",
+    "Miguel Matias, MNCN-CSIC  ·  ",
     tags$a(href = "https://github.com/miguelmatias/meditrack_db", target = "_blank", rel = "noopener", "github.com/miguelmatias/meditrack_db")
   )
 )
 
 splash_ui <- div(
   id = "mt-splash",
-  tags$img(
-    src = "meditrack_logo.png",
-    alt = "MEDITRACK — Mediterranean climate and lake ecosystems",
-    width = "280",
-    class = "splash-logo"
+  div(
+    class = "splash-brand",
+    tags$img(
+      src = "meditrack_logo.png",
+      alt = "MEDITRACK — Mediterranean climate and lake ecosystems",
+      width = "280",
+      class = "splash-logo"
+    ),
+    tags$p(class = "splash-affil", "Museo Nacional de Ciencias Naturales (MNCN-CSIC), Madrid")
   ),
   actionButton("enter_app", "Enter", class = "btn-dark btn-lg splash-enter")
 )
@@ -448,9 +450,8 @@ table_panel <- div(
   class = "table-pane",
   tags$p(
     class = "table-note",
-    "Public catalog fields only — not the compiled climate or pollen series. Sort and search here; the same sidebar filters apply."
+    "Public catalog fields only — not the compiled climate or pollen series. Sort and search here; the same sidebar filters apply. No table export."
   ),
-  downloadButton("catalog_csv", "Download catalog CSV", class = "btn-sm btn-outline-dark"),
   DTOutput("catalog")
 )
 
@@ -490,7 +491,8 @@ ui <- tagList(
             n_cores_live,
             meta$freeze_date %||% ""
           )
-        )
+        ),
+        tags$p(class = "brand-affil", "MNCN-CSIC, Madrid")
       ),
       textInput("site_search", "Search sites", placeholder = "Name contains…"),
       selectInput(
@@ -1016,11 +1018,13 @@ server <- function(input, output, session) {
       rownames = FALSE,
       escape = FALSE,
       selection = "single",
+      extensions = character(0),
       options = list(
         pageLength = 25,
         autoWidth = TRUE,
         deferRender = TRUE,
-        dom = "frtip"
+        dom = "frtip",
+        buttons = NULL
       )
     )
   })
@@ -1037,22 +1041,6 @@ server <- function(input, output, session) {
       updateTabsetPanel(session, "main_nav", selected = "map")
     }
   })
-
-  output$catalog_csv <- downloadHandler(
-    filename = function() "meditrack_catalog.csv",
-    content = function(file) {
-      df <- filtered()
-      keep <- intersect(
-        c(
-          "site_name", "country", "peninsula", "record_label", "subclass_list",
-          "n_cores", "span_display", "span_notes", "latitude", "longitude",
-          "doi_url", "dataset_dois", "neotoma_site_ids"
-        ),
-        names(df)
-      )
-      utils::write.csv(df[, keep, drop = FALSE], file, row.names = FALSE, fileEncoding = "UTF-8")
-    }
-  )
 }
 
 shinyApp(ui, server)

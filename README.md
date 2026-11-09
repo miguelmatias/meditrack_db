@@ -2,13 +2,15 @@
 
 Read-only Shiny map of the Mediterranean downcore lake catalog used in the MEDITRACK proposal. Click a site for proxy coverage and, when compiled, TraCE climate, pollen rate-of-change, Erb temperature, or chironomid July T. Climate overlays are the same TraCE / LGM / CMIP6 layers discussed in the proposal. **The compiled database cannot be downloaded.**
 
-Live URL: https://miguelmatias.shinyapps.io/meditrack_db/
+Hosted and developed at the Museo Nacional de Ciencias Naturales (MNCN-CSIC), Madrid, by Miguel Matias.
+
+Live URL: https://meditrack.shinyapps.io/archive/
 
 Source: https://github.com/miguelmatias/meditrack_db
 
 ## Proposal caption
 
-An interactive map of the Mediterranean lake archive (live count from MASTER) and TraCE / LGM / CMIP6 hydroclimate overlays is at https://miguelmatias.shinyapps.io/meditrack_db/. Click a site for proxy coverage and available time series. The compiled database is not downloadable.
+An interactive map of the Mediterranean lake archive (live count from MASTER) and TraCE / LGM / CMIP6 hydroclimate overlays is at https://meditrack.shinyapps.io/archive/. Click a site for proxy coverage and available time series. The compiled database is not downloadable. Hosted at MNCN-CSIC, Madrid.
 
 ## What is shown
 
@@ -39,9 +41,15 @@ That writes `data/sites.geojson`, `data/meta.json`, `data/overlays/`, and `data/
 
 ## Deploy
 
+The hostname **is** the shinyapps.io account name (`https://<account>.shinyapps.io/<appName>/`). A URL such as `https://meditrack.shinyapps.io/archive/` needs an account named `meditrack`; renaming only the app still shows `miguelmatias`. shinyapps.io does not redirect old URLs. Two accounts can host the same app; hours count separately.
+
 1. Install packages: `shiny`, `bslib`, `leaflet`, `plotly`, `jsonlite`, `htmltools`, `DT`.
-2. Log in to [shinyapps.io](https://www.shinyapps.io/) and run `rsconnect::setAccountInfo(...)` once.
-3. From this directory: `Rscript deploy.R`.
+2. Claim the `meditrack` handle (once; email + captcha — not scriptable):
+   - Open [shinyapps.io login](https://www.shinyapps.io/admin/#/login).
+   - Register username **meditrack** if it is available (a different login from `miguelmatias`), **or** Account → Settings → Rename on the existing account (that rewrites every URL on that account, including `azores-lakes-explorer`).
+   - Tokens (avatar menu) → Show, then in R:
+     `rsconnect::setAccountInfo(name = "meditrack", token = "...", secret = "...")`
+3. From this directory: `Rscript deploy.R` (publishes to `account = "meditrack"`, `appName = "archive"` → https://meditrack.shinyapps.io/archive/). Do not deploy to `miguelmatias`.
 
 shinyapps.io **free** is 25 hours/month and sleeps after idle. The first click after sleep is slow, and a review panel can burn the quota. For the review window use **Starter or Basic**. If the app is asleep, wait ~30 s; if hours are exhausted the link will fail until the next month or an upgrade.
 
@@ -50,6 +58,6 @@ GitHub cannot run Shiny. This repo holds the app source and the public site cata
 ## No-download policy
 
 - No download of compiled TraCE / RoC / Erb / chironomid series. Plotly mode bar off.
+- No catalog CSV, Excel, copy, or print export. The table is browse-only.
 - Time series are not in `www/` and are not committed.
-- Optional CSV of the public catalog table (names, coordinates, class, proxies) is allowed — those fields are already in `data/sites.geojson`.
 - Site names, coordinates and proxy flags in `data/sites.geojson` are the public face of the archive (already in the papers). Screenshots cannot be prevented.
