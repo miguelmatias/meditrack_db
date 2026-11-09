@@ -10,6 +10,32 @@ html, body {
   background: #fff;
   color: var(--ink);
 }
+
+#mt-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+}
+html.mt-app-mode #mt-splash { display: none !important; }
+html:not(.mt-app-mode),
+html:not(.mt-app-mode) body {
+  overflow: hidden;
+}
+.splash-logo {
+  width: 280px;
+  height: auto;
+}
+.splash-enter {
+  min-width: 8rem;
+  letter-spacing: 0.04em;
+}
+
 .navbar, .navbar-brand { display: none !important; }
 .bslib-page-sidebar > .navbar { display: none !important; }
 .bslib-sidebar-layout {
@@ -41,6 +67,16 @@ html, body {
   display: flex !important;
   flex-direction: column;
   background: #fff !important;
+}
+
+.bslib-page-main .tabbable,
+.bslib-page-main > .tab-content,
+.bslib-page-main > div {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .main-stack {
@@ -127,10 +163,30 @@ html, body {
   border: 1px solid var(--ink);
 }
 .swatch.ring.gold { background: transparent; border: 2px solid var(--gold); }
+.swatch.star.gold {
+  background: var(--gold);
+  border: 1px solid var(--ink);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  border-radius: 0;
+}
+.swatch.diamond.gold {
+  width: 0.55rem;
+  height: 0.55rem;
+  background: transparent;
+  border: 2px solid var(--gold);
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
 .ramp { height: 0.55rem; border-radius: 2px; margin-top: 0.2rem; }
 .ramp-labels { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.72rem; }
 
-.caption-note { font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; }
+.caption-note, .overlay-caption {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 0.15rem 0 0.55rem;
+  line-height: 1.35;
+}
+.overlay-caption { min-height: 2.1em; }
 
 .site-card {
   background: white;
@@ -230,9 +286,77 @@ html, body {
 .irs-line { background: #d5d8dc !important; border-color: #d5d8dc !important; }
 .irs-bar { background: #1c2833 !important; border-color: #1c2833 !important; }
 .irs-handle { border-color: #1c2833 !important; background: #fff !important; }
-.irs-min, .irs-max, .irs-from, .irs-to, .irs-single {
+.irs-from, .irs-to, .irs-single {
   background: #1c2833 !important;
   color: #fff !important;
 }
+.irs-min, .irs-max { display: none !important; }
+.irs-grid { display: none !important; }
 .irs-grid-text { color: var(--muted) !important; }
 .irs-grid-pol { background: #d5d8dc !important; }
+
+.nav-tabs {
+  padding: 0.25rem 0.7rem 0;
+  background: #fff;
+  border-bottom: 1px solid #d5d8dc;
+}
+.nav-tabs .nav-link {
+  color: var(--muted);
+  font-size: 0.9rem;
+  border: none;
+  padding: 0.4rem 0.75rem;
+}
+.nav-tabs .nav-link.active {
+  color: var(--ink);
+  font-weight: 650;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--ink);
+}
+.tab-content, .tab-pane.active {
+  height: 100%;
+  min-height: 0;
+}
+.tab-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+.tab-pane.active {
+  display: flex !important;
+  flex-direction: column;
+}
+.bslib-page-main > .tab-content,
+.bslib-page-main > * {
+  min-height: 0;
+}
+
+.about-copy {
+  max-width: 42rem;
+  padding: 1.1rem 1.25rem 1.6rem;
+  overflow: auto;
+}
+.about-copy h2 { font-size: 1.25rem; margin: 0 0 0.6rem; }
+.about-copy h3 { font-size: 0.95rem; margin: 1rem 0 0.3rem; }
+.about-copy p { font-size: 0.9rem; color: var(--ink); }
+
+.table-pane {
+  padding: 0.6rem 0.8rem 0.8rem;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.table-note { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.45rem; }
+.table-pane .btn { align-self: flex-start; margin-bottom: 0.45rem; }
+
+.links a {
+  margin-right: 0.75rem;
+  font-size: 0.8rem;
+  color: #1a5276;
+}
+.span-notes { font-size: 0.72rem; color: var(--muted); margin-top: 0.12rem; }
+.series-caption { font-size: 0.72rem; color: var(--muted); margin: 0.15rem 0 0.1rem; }
+.popup-cand { font-size: 0.85em; color: #5d6d7e; }
+#age_midhol { margin-bottom: 0.45rem; }

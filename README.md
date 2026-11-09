@@ -39,7 +39,7 @@ That writes `data/sites.geojson`, `data/meta.json`, `data/overlays/`, and `data/
 
 ## Deploy
 
-1. Install packages: `shiny`, `bslib`, `leaflet`, `plotly`, `jsonlite`, `htmltools`, `dplyr`.
+1. Install packages: `shiny`, `bslib`, `leaflet`, `plotly`, `jsonlite`, `htmltools`, `DT`.
 2. Log in to [shinyapps.io](https://www.shinyapps.io/) and run `rsconnect::setAccountInfo(...)` once.
 3. From this directory: `Rscript deploy.R`.
 
@@ -49,6 +49,7 @@ GitHub cannot run Shiny. This repo holds the app source and the public site cata
 
 ## No-download policy
 
-- No download buttons, no CSV/Excel export, Plotly mode bar off.
+- No download of compiled TraCE / RoC / Erb / chironomid series. Plotly mode bar off.
 - Time series are not in `www/` and are not committed.
+- Optional CSV of the public catalog table (names, coordinates, class, proxies) is allowed — those fields are already in `data/sites.geojson`.
 - Site names, coordinates and proxy flags in `data/sites.geojson` are the public face of the archive (already in the papers). Screenshots cannot be prevented.

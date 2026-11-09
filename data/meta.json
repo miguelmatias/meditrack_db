@@ -21,9 +21,9 @@
   "n_with_chironomid": 12,
   "n_overlays": 9,
   "record_colors": {
-    "pollen_only": "#5d6d7e",
+    "pollen_only": "#5D6D7E",
     "aquatic": "#1ABC9C",
-    "paired": "#C0392B"
+    "paired": "#2E5A88"
   },
   "record_labels": {
     "pollen_only": "Pollen only",
