@@ -245,7 +245,7 @@ ui <- page_sidebar(
         src = "meditrack_logo.png",
         alt = "MEDITRACK — Mediterranean climate and lake ecosystems",
         class = "brand-logo",
-        width = "140"
+        width = "280"
       ),
       tags$div(class = "brand-kicker", "v1"),
       tags$h1("Mediterranean lake archive"),
